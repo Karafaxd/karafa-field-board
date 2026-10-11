@@ -1,0 +1,421 @@
+
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080808">
+  <meta name="description" content="Ο ψηφιακός πίνακας ανακοινώσεων της KARAFA.">
+  <title>KARAFA — Field Board</title>
+
+  <style>
+    :root {
+      --bg: #080808;
+      --panel: #151111;
+      --panel2: #100d0d;
+      --border: #382323;
+      --text: #f5f5f5;
+      --muted: #aaa0a0;
+      --accent: #f02727;
+      --accent-bright: #ff4545;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(ellipse at 50% 0%, #3a0909 0%, transparent 48%),
+        var(--bg);
+      color: var(--text);
+      font-family: Inter, system-ui, -apple-system, sans-serif;
+    }
+
+    main {
+      width: min(100% - 28px, 620px);
+      margin: auto;
+      padding: 22px 0 20px;
+      animation: enter .6s ease both;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo-image {
+      display: block;
+      width: min(68%, 390px);
+      max-width: 390px;
+      height: auto;
+      object-fit: contain;
+      flex: 0 1 auto;
+    }
+
+    .status {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--accent-bright);
+      font-size: 9px;
+      letter-spacing: 1px;
+      white-space: nowrap;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 12px #f0272780;
+    }
+
+    h1, h2, h3, p { margin: 0; }
+
+    .intro { padding: 32px 0 23px; }
+
+    .eyebrow {
+      color: var(--accent-bright);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .intro h1 {
+      margin: 12px 0;
+      font-size: clamp(35px, 8vw, 49px);
+      letter-spacing: -2px;
+      line-height: 1.08;
+    }
+
+    .intro p:last-child {
+      max-width: 430px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .card {
+      overflow: hidden;
+      padding: 20px;
+      background: linear-gradient(145deg, #1b1414, #100d0d);
+      border: 1px solid var(--border);
+      border-radius: 19px;
+      box-shadow: 0 20px 55px #0006;
+    }
+
+    .place {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 20px 0 17px;
+    }
+
+    .pin-icon {
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      width: 45px;
+      height: 45px;
+      border-radius: 12px;
+      background: #3a1717;
+      color: var(--accent-bright);
+      font-size: 22px;
+    }
+
+    .place h3 {
+      margin: 5px 0;
+      font-size: 19px;
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    #map {
+      display: block;
+      width: 100%;
+      height: 270px;
+      border: 1px solid #593030;
+      border-radius: 13px;
+      background: #201717;
+    }
+
+    .button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      width: 100%;
+      margin-top: 13px;
+      padding: 15px;
+      border: 0;
+      border-radius: 10px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 850;
+      text-decoration: none;
+      transition: transform .2s, background .2s;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+      background: #ff4242;
+    }
+
+    .details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 11px;
+      margin-top: 12px;
+    }
+
+    .detail {
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      background: var(--panel2);
+    }
+
+    .detail strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .message {
+      margin-top: 13px;
+      padding: 15px;
+      border-left: 2px solid var(--accent);
+      border-radius: 0 10px 10px 0;
+      background: #f0272710;
+    }
+
+    .message p:last-child {
+      margin-top: 7px;
+      color: #d0c4c4;
+      font-size: 13px;
+      line-height: 1.7;
+      white-space: pre-line;
+    }
+
+    footer {
+      padding: 26px 0 8px;
+      color: #887b7b;
+      font-size: 10px;
+      letter-spacing: 2px;
+      line-height: 2;
+      text-align: center;
+    }
+
+    footer span { color: var(--accent-bright); }
+
+    @keyframes enter {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 480px) {
+      main {
+        width: calc(100% - 22px);
+        padding-top: 16px;
+      }
+
+      header { gap: 9px; }
+      .logo-image { width: 63%; }
+
+      .status {
+        font-size: 8px;
+        gap: 5px;
+      }
+
+      .card { padding: 14px; }
+      #map { height: 235px; }
+    }
+
+    @media (max-width: 350px) {
+      .status { display: none; }
+      .logo-image { width: 75%; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <header>
+      <img class="logo-image" src="karafa-logo.png"
+           alt="KARAFA graffiti logo">
+
+      <div class="status">
+        <span class="dot" aria-hidden="true"></span>
+        FIELD BOARD
+      </div>
+    </header>
+
+    <section class="intro">
+      <p class="eyebrow" id="missionLabel">
+        MISSION 001 / FIELD NOTICE
+      </p>
+
+      <h1 id="headline">Η ομάδα<br>σε περιμένει.</h1>
+
+      <p id="introText">
+        Ένα σημείο. Μία ομάδα. Μία αποστολή.
+        Δες την ανακοίνωση και ακολούθησε τον χάρτη.
+      </p>
+    </section>
+
+    <section class="card">
+      <p class="eyebrow">ΕΠΟΜΕΝΟ CHECKPOINT</p>
+
+      <div class="place">
+        <div class="pin-icon" aria-hidden="true">⌖</div>
+
+        <div>
+          <p class="muted" id="placeLabel">
+            Σημείο συνάντησης
+          </p>
+
+          <h3 id="placeName">Αλεξανδρούπολη</h3>
+
+          <p class="muted" id="placeDescription">
+            Ενδεικτικό σημείο πόλης — όχι τελική τοποθεσία
+          </p>
+        </div>
+      </div>
+
+      <!-- GOOGLE MAPS -->
+      <iframe
+        id="map"
+        title="Χάρτης σημείου συνάντησης KARAFA"
+        src="https://maps.google.com/maps?q=40.8457,25.8739&z=15&output=embed"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        allowfullscreen>
+      </iframe>
+
+      <a id="directions"
+         class="button"
+         href="https://www.google.com/maps/dir/?api=1&destination=40.8457,25.8739"
+         target="_blank"
+         rel="noopener noreferrer">
+        ↗ ΟΔΗΓΙΕΣ ΓΙΑ ΤΟ ΣΗΜΕΙΟ
+      </a>
+
+      <div class="details">
+        <div class="detail">
+          <p class="eyebrow">ΗΜΕΡΟΜΗΝΙΑ</p>
+          <strong id="meetingDate">Προς ανακοίνωση</strong>
+        </div>
+
+        <div class="detail">
+          <p class="eyebrow">ΩΡΑ</p>
+          <strong id="meetingTime">Προς ανακοίνωση</strong>
+        </div>
+      </div>
+
+      <div class="message">
+        <p class="eyebrow">ΜΗΝΥΜΑ ΑΠΟ ΤΗΝ ΟΜΑΔΑ</p>
+        <p id="messageText">
+          Μείνετε συντονισμένοι για την επόμενη συνάντηση.
+        </p>
+      </div>
+    </section>
+
+    <footer>
+      DISCIPLINE · RESPECT · TEAMWORK<br>
+      <span>ONE TEAM. ONE PATH.</span>
+    </footer>
+  </main>
+
+  <script>
+    /*
+      KARAFA — ΡΥΘΜΙΣΕΙΣ ΑΝΑΚΟΙΝΩΣΗΣ
+
+      Αλλάζεις τις παρακάτω τιμές για να ενημερώσεις
+      το σημείο, την ημερομηνία, την ώρα και το μήνυμα.
+    */
+
+    const announcement = {
+      mission: "MISSION 001 / FIELD NOTICE",
+
+      headline: "Η ομάδα<br>σε περιμένει.",
+
+      intro: "Ένα σημείο. Μία ομάδα. Μία αποστολή. " +
+             "Δες την ανακοίνωση και ακολούθησε τον χάρτη.",
+
+      place: "Αλεξανδρούπολη",
+
+      description: "Ενδεικτικό σημείο πόλης — όχι τελική τοποθεσία",
+
+      // ΣΥΝΤΕΤΑΓΜΕΝΕΣ ΣΗΜΕΙΟΥ ΣΥΝΑΝΤΗΣΗΣ
+      latitude: 40.8457,
+      longitude: 25.8739,
+
+      // ΕΠΟΜΕΝΗ ΣΥΝΑΝΤΗΣΗ
+      date: "Προς ανακοίνωση",
+      time: "Προς ανακοίνωση",
+
+      message: "Μείνετε συντονισμένοι για την επόμενη συνάντηση."
+    };
+
+    // ΕΝΗΜΕΡΩΣΗ ΚΕΙΜΕΝΩΝ
+    document.getElementById("missionLabel").textContent =
+      announcement.mission;
+
+    document.getElementById("headline").innerHTML =
+      announcement.headline;
+
+    document.getElementById("introText").textContent =
+      announcement.intro;
+
+    document.getElementById("placeName").textContent =
+      announcement.place;
+
+    document.getElementById("placeDescription").textContent =
+      announcement.description;
+
+    document.getElementById("meetingDate").textContent =
+      announcement.date;
+
+    document.getElementById("meetingTime").textContent =
+      announcement.time;
+
+    document.getElementById("messageText").textContent =
+      announcement.message;
+
+    // ΕΝΗΜΕΡΩΣΗ GOOGLE MAPS ΑΠΟ ΤΙΣ ΣΥΝΤΕΤΑΓΜΕΝΕΣ
+    const latitude = announcement.latitude;
+    const longitude = announcement.longitude;
+
+    const coordinates = `${latitude},${longitude}`;
+
+    document.getElementById("map").src =
+      "https://maps.google.com/maps?q=" +
+      encodeURIComponent(coordinates) +
+      "&z=16&output=embed";
+
+    // ΚΟΥΜΠΙ ΟΔΗΓΙΩΝ GOOGLE MAPS
+    document.getElementById("directions").href =
+      "https://www.google.com/maps/dir/?api=1&destination=" +
+      encodeURIComponent(coordinates);
+  </script>
+</body>
+</html>
